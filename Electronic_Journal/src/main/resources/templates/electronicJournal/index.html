@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <title>Index</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+</head>
+<body>
+<header th:insert="~{blocks/header :: header}"></header>
+<form action="/electronicJournal/date/" method="get">
+    <div class="row justify-content-left" style="margin-left:3%">
+        <label>
+            Начальная дата: &nbsp;
+        </label>
+        <input type="datetime-local" name="eventTime" required> &nbsp; &nbsp;
+        <label>
+            Конечная дата: &nbsp;
+        </label>
+        <input type="datetime-local" name="recordCreationDate" required> &nbsp; &nbsp;
+
+        <button class="btn btn-primary" type="submit">Найти</button>
+    </div>
+</form>
+<br>
+<form action="/electronicJournal/index" method="get">
+    <div class="row justify-content-left" style="margin-left:3%">
+        <button type="submit" class="btn btn-secondary"> Вернуться на главную</button>
+    </div>
+</form>
+<br>
+<a th:href="@{/electronicJournal/create}" class="btn btn-success btn-sm mb-3 row justify-content-left" style="margin-left:3%"> Создать новую запись </a>
+
+<form action="@{/electronicJournal/save}" method="get">
+</form>
+
+<table class="table" align="center">
+    <thead class="thead-dark">
+    <tr>
+        <th>ФИО дежурного</th>
+        <th>Номер бригады</th>
+        <th>
+            <a th:href="@{'/electronicJournal/page/' + ${currentPage} + '?sortField=eventTime&sortDir=' + ${reverseSortDir}}">Время
+                события</a>
+        </th>
+        <th>Описание события</th>
+        <th>Действие дежурного</th>
+        <th>Статус действия</th>
+        <th>Дата создания записи</th>
+        <th>Действие с записями</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    <tr th:each="ej : ${electronicJournal}">
+        <td><span th:text="${ej.officerFullName}">ФИО дежурного</span></td>
+        <td><span th:text="${ej.brigadeNumber}">Номер бригады</span></td>
+        <td><span th:text="${#temporals.format(ej.eventTime, 'dd-MM-yyyy HH:mm')}">Время события</span></td>
+        <td><span th:text="${ej.eventDescription}">Описание события</span></td>
+        <td><span th:text="${ej.dutyOfficer}">Действие дежурного</span></td>
+        <td><span th:text="${ej.actionStatus}">Статус действия</span></td>
+        <td><span th:text="${#temporals.format(ej.recordCreationDate, 'dd-MM-yyyy HH:mm')}">Дата создания записи</span>
+        </td>
+        <td><a th:href="@{/electronicJournal/edit/{id}(id=${ej.id})}" class="btn btn-primary">Редактировать</a>
+            <p></p>
+            <a th:href="@{/electronicJournal/delete/{id}(id=${ej.id})}" class="btn btn-danger">Удалить</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<div th:if="${totalPages > 1}">
+    <div class="row col-sm-10">
+        <div class="col-sm-2">
+            Всего записей: [[${totalItems}]]
+        </div>
+        <div class="col-sm-1">
+     <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+      <a th:if="${currentPage != i}"
+         th:href="@{'/electronicJournal/page/' + ${i}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">[[${i}]]</a>
+      <span th:unless="${currentPage != i}">[[${i}]]</span>  &nbsp;
+     </span>
+        </div>
+        <div class="col-sm-1">
+            <a th:if="${currentPage < totalPages}"
+               th:href="@{'/electronicJournal/page/' + ${currentPage + 1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Следующаяя
+                страница</a> &nbsp;
+            <span th:unless="${currentPage < totalPages}">Следующаяя страница</span> &nbsp;
+        </div>
+
+        <div class="col-sm-1">
+            <a th:if="${currentPage < totalPages}"
+               th:href="@{'/electronicJournal/page/' + ${totalPages}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Последняя
+                страница</a> &nbsp;
+            <span th:unless="${currentPage < totalPages}">Последняя страница</span> &nbsp;
+        </div>
+    </div>
+</div>
+
+<footer th:insert="~{blocks/footer :: footer}"></footer>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/popper.min.js"></script>
+<script src="/static/js/jquery-3.6.4.min.js"></script>
+</body>
+</html>

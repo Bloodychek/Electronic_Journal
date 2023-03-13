@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <title>createElectronicJournal</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+</head>
+<body>
+<h1 align="center">Создание новой записи</h1>
+<div class="container">
+    <form action="#" th:action="@{/electronicJournal/save}" th:object="${electronicJournal}" method="post">
+        <input type="hidden" th:field="*{id}"/>
+        <label>ФИО дежурного</label>
+        <h1 class="form-control mb-4 col-4" th:inline="text">[[${#httpServletRequest.remoteUser}]]</h1>
+        <label>Время события</label>
+        <input type="datetime-local" th:field="*{eventTime}" required class="form-control mb-4 col-4"
+               placeholder="Введите время события">
+        <label>Описание события</label>
+        <input type="text" th:field="*{eventDescription}" class="form-control mb-4 col-4"
+               placeholder="Введите описание события">
+        <label>Действие дежурного</label>
+        <input type="text" th:field="*{dutyOfficer}" required class="form-control mb-4 col-4"
+               placeholder="Введите действие дежурного">
+        <label>Статус действия: </label>
+        <select id="actionStatus" name="actionStatus">
+            <option value="Устранено">Устранено</option>
+            <option value="Не устранено">Не устранено</option>
+            <option value="В процессе">В процессе</option>
+            <option value="Смену принял">Смену принял</option>
+            <option value="Смену сдал">Смену сдал</option>
+        </select>
+        <br>
+        <button type="submit" class="btn btn-success col-2"> Сохранить запись</button>
+    </form>
+    <br>
+    <form action="/electronicJournal/index" method="get">
+        <div>
+            <button type="submit" class="btn btn-warning"> Вернуться на главную</button>
+        </div>
+    </form>
+</div>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/popper.min.js"></script>
+<script src="/static/js/jquery-3.6.4.min.js"></script>
+</body>
+</html>
