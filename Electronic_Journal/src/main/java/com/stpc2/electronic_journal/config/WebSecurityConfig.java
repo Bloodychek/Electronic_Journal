@@ -27,11 +27,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests() //Включить авторизацию
-                    .antMatchers("/user/login", "/static/**").permitAll() //пути для полного доступа
+                    .antMatchers("/login", "/static/**").permitAll() //пути для полного доступа
                     .anyRequest().authenticated() //для всех остальных запросов требуется авторизация
                 .and()
                     .formLogin()   //включаем форму логина
-                    .loginPage("/user/login") // страница входа
+                    .loginPage("/login") // страница входа
                     .permitAll() //по адресу /login разрешаем доступ для всех
                     .defaultSuccessUrl("/electronicJournal/index").failureUrl("/login?error").permitAll()
                 .and()

@@ -16,8 +16,8 @@ public class UserServiceImpl implements UserDetailsService {
     private final UserRepo userRepo;
 
     @Override
-    public UserDetails loadUserByUsername(String shortFio){
-        User user = userRepo.findByShortFIO(shortFio);
+    public UserDetails loadUserByUsername(String personalNo){
+        User user = userRepo.findByPersonalNo(personalNo);
         UserService userService = null;
         if(user !=null)
         {

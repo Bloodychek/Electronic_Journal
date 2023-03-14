@@ -4,6 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
     <title>createElectronicJournal</title>
     <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="icon" href="/static/journal.png" type="image/png">
 </head>
 <body>
 <h1 align="center">Создание новой записи</h1>
@@ -19,7 +20,7 @@
         <input type="text" th:field="*{eventDescription}" class="form-control mb-4 col-4"
                placeholder="Введите описание события">
         <label>Действие дежурного</label>
-        <input type="text" th:field="*{dutyOfficer}" required class="form-control mb-4 col-4"
+        <input type="text" th:field="*{dutyOfficer}" class="form-control mb-4 col-4"
                placeholder="Введите действие дежурного">
         <label>Статус действия: </label>
         <select id="actionStatus" name="actionStatus">

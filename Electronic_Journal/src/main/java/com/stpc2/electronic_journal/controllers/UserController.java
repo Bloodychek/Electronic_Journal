@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RequiredArgsConstructor
 public class UserController {
 
-    @GetMapping("/user/login")
+    @GetMapping("/login")
     public String login() {
-        return "user/login";
+        return "login";
     }
 }
 

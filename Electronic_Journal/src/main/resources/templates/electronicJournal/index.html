@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html" lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
     <title>Index</title>
     <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="icon" href="/static/journal.png" type="image/png">
 </head>
 <body>
 <header th:insert="~{blocks/header :: header}"></header>
@@ -28,7 +29,10 @@
     </div>
 </form>
 <br>
-<a th:href="@{/electronicJournal/create}" class="btn btn-success btn-sm mb-3 row justify-content-left" style="margin-left:3%"> Создать новую запись </a>
+<div th:if="${#httpServletRequest.remoteUser} != 'Кендыш И.В.'">
+    <a th:href="@{/electronicJournal/create}" class="btn btn-success btn-sm mb-3 row justify-content-left"
+       style="margin-left:3%"> Создать новую запись </a>
+</div>
 
 <form action="@{/electronicJournal/save}" method="get">
 </form>
@@ -45,7 +49,7 @@
         <th>Описание события</th>
         <th>Действие дежурного</th>
         <th>Статус действия</th>
-        <th>Дата создания записи</th>
+        <!--<th>Дата создания записи</th>-->
         <th>Действие с записями</th>
     </tr>
     </thead>
@@ -58,12 +62,14 @@
         <td><span th:text="${ej.eventDescription}">Описание события</span></td>
         <td><span th:text="${ej.dutyOfficer}">Действие дежурного</span></td>
         <td><span th:text="${ej.actionStatus}">Статус действия</span></td>
-        <td><span th:text="${#temporals.format(ej.recordCreationDate, 'dd-MM-yyyy HH:mm')}">Дата создания записи</span>
-        </td>
-        <td><a th:href="@{/electronicJournal/edit/{id}(id=${ej.id})}" class="btn btn-primary">Редактировать</a>
-            <p></p>
-            <a th:href="@{/electronicJournal/delete/{id}(id=${ej.id})}" class="btn btn-danger">Удалить</a>
-        </td>
+        <!--<td><span th:text="${#temporals.format(ej.recordCreationDate, 'dd-MM-yyyy HH:mm')}">Дата создания записи</span>-->
+        <div th:if="${#httpServletRequest.remoteUser} == ${ej.officerFullName}">
+            <td>
+                <a th:href="@{/electronicJournal/edit/{id}(id=${ej.id})}" class="btn btn-primary">Редактировать</a>
+                <p></p>
+                <a th:href="@{/electronicJournal/delete/{id}(id=${ej.id})}" class="btn btn-danger">Удалить</a>
+            </td>
+        </div>
     </tr>
     </tbody>
 </table>

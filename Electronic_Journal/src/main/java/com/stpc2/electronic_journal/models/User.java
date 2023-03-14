@@ -29,6 +29,10 @@ public class User{
     @Column(name = "CATEGORY_NAME")
     private String role;
 
+    // data access number
     @Column(name = "DIV_NO")
     private int divNo;
+
+    @Column(name = "PERSONAL_NO")
+    private String personalNo;
 }
