@@ -10,6 +10,6 @@ import java.util.List;
 public interface ElectronicJournalRepo extends JpaRepository<ElectronicJournal, Integer> {
     List<ElectronicJournal> findAllByEventTimeBetween(LocalDateTime startTime, LocalDateTime endTime);
 
-    @Query(value = "select calc_brigada_20(sysdate + 0.02) from dual", nativeQuery = true)
+    @Query(value = "select calc_brigada_20(sysdate) from dual", nativeQuery = true)
     Integer getBrigadeNumber();
 }

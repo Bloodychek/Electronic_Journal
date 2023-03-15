@@ -1,0 +1,7 @@
+<div th:fragment="header">
+    <div class="row justify-content-left container" style="margin-left:2%">
+        <header>
+            <p><h1 th:inline="text"> Дежурный: [[${#httpServletRequest.remoteUser}]]</h1></p>
+        </header>
+    </div>
+</div>
