@@ -2,21 +2,17 @@ package com.stpc2.electronic_journal.controllers;
 
 import com.stpc2.electronic_journal.models.ElectronicJournal;
 import com.stpc2.electronic_journal.repositories.ElectronicJournalRepo;
-import com.stpc2.electronic_journal.serviceImpl.UserService;
 import com.stpc2.electronic_journal.services.ElectronicJournalService;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -109,17 +105,23 @@ public class ElectronicJournalController {
     }
 
     @GetMapping("/electronicJournal/date")
-    public String findAllByEventTimeBetween(@RequestParam(name = "eventTime") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime eventTime,
-                                            @RequestParam(name = "recordCreationDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime recordCreationDate, Model model) {
-            if(eventTime != null && recordCreationDate != null){
-                List<ElectronicJournal> findByRangeDate = electronicJournalRepo.findAllByEventTimeBetween(eventTime, recordCreationDate);
-                model.addAttribute("electronicJournal", findByRangeDate);
-                return "electronicJournal/index";
-            }
-            else {
-                return "electronicJournal/index";
-            }
-            //return findPaginated(1,"eventTime", "asc", model);
+    public String findAllByEventTimeBetween(@RequestParam(name = "eventTime") @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime eventTime,
+                                            @RequestParam(name = "recordCreationDate") @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime recordCreationDate, Model model) {
+        if (eventTime != null && recordCreationDate != null) {
+            List<ElectronicJournal> findByRangeDate = electronicJournalRepo.findAllByEventTimeBetween(eventTime, recordCreationDate);
+            model.addAttribute("electronicJournal", findByRangeDate);
+        } else {
+            model.addAttribute("electronicJournal", electronicJournalService.findAll());
+        }
+        return "electronicJournal/index";
+    }
 
+    @GetMapping("/electronicJournal/description")
+    public String findAllByEventDescription(@RequestParam(name = "eventDescription") @Nullable String eventDescription, Model model) {
+        if (eventDescription != null) {
+            List<ElectronicJournal> findByDescription = electronicJournalRepo.findAllByEventDescription(eventDescription);
+            model.addAttribute("electronicJournal", findByDescription);
+        }
+        return "electronicJournal/index";
     }
 }

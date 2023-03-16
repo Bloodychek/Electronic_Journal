@@ -16,5 +16,4 @@ public interface ElectronicJournalService {
     void delete(int id);
 
     Page<ElectronicJournal> findPaginated(int pageNo, int PageSize, String sortField, String sortDir);
-
 }

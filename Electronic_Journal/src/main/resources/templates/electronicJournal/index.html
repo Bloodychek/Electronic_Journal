@@ -13,12 +13,22 @@
         <label>
             Начальная дата: &nbsp;
         </label>
-        <input type="datetime-local" name="eventTime" required> &nbsp; &nbsp;
+        <input type="datetime-local" name="eventTime" > &nbsp; &nbsp;
         <label>
             Конечная дата: &nbsp;
         </label>
-        <input type="datetime-local" name="recordCreationDate" required> &nbsp; &nbsp;
+        <input type="datetime-local" name="recordCreationDate" > &nbsp; &nbsp;
 
+        <button class="btn btn-primary" type="submit">Найти</button>
+    </div>
+</form>
+<br>
+<form action="/electronicJournal/description/" method="get">
+    <div class="row justify-content-left" style="margin-left:3%">
+        <label>
+            Введите ключевое слово: &nbsp;
+        </label>
+        <input type="text" name="eventDescription"> &nbsp;
         <button class="btn btn-primary" type="submit">Найти</button>
     </div>
 </form>
