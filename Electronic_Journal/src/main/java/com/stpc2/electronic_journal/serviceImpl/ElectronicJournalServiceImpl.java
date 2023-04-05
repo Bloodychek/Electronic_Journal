@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -32,7 +34,7 @@ public class ElectronicJournalServiceImpl implements ElectronicJournalService {
         if (optional.isPresent()) {
             electronicJournal = optional.get();
         } else {
-            throw new RuntimeException("Electronic journal not found by id: " + id);
+            throw new RuntimeException("Не найдено записи по id: " + id);
         }
         return electronicJournal;
     }
@@ -48,10 +50,21 @@ public class ElectronicJournalServiceImpl implements ElectronicJournalService {
     }
 
     @Override
-    public Page<ElectronicJournal> findPaginated(int pageNo, int pageSize, String sortField, String sortDir) {
+    public Page<ElectronicJournal> findPaginated(int pageNumber, String sortField, String sortDir, LocalDateTime eventTime, LocalDateTime recordCreationDate) {
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.DESC.name()) ? Sort.by(sortField).descending() :
                 Sort.by(sortField).ascending();
-        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
+        Pageable pageable = PageRequest.of(pageNumber - 1, 10, sort);
+        if(eventTime != null && recordCreationDate != null){
+            return electronicJournalRepo.findAllByEventTimeBetween(eventTime, recordCreationDate, pageable);
+        }
         return this.electronicJournalRepo.findAll(pageable);
+    }
+
+    @Override
+    public List<ElectronicJournal> findAllByEventDescription(String eventDescription){
+        if(eventDescription != null){
+            return electronicJournalRepo.findAllByEventDescription(eventDescription);
+        }
+        return electronicJournalRepo.findAll();
     }
 }

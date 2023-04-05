@@ -8,27 +8,27 @@
 </head>
 <body>
 <header th:insert="~{blocks/header :: header}"></header>
-<form action="/electronicJournal/date/" method="get">
-    <div class="row justify-content-left" style="margin-left:3%">
-        <label>
-            Начальная дата: &nbsp;
-        </label>
-        <input type="datetime-local" name="eventTime" > &nbsp; &nbsp;
-        <label>
-            Конечная дата: &nbsp;
-        </label>
-        <input type="datetime-local" name="recordCreationDate" > &nbsp; &nbsp;
 
-        <button class="btn btn-primary" type="submit">Найти</button>
-    </div>
-</form>
+<div>
+    <form th:action="@{/electronicJournal/page/1}">
+        <div class="row justify-content-left" style="margin-left:3%">
+            <input type="hidden" name="sortField" th:value="${sortField}"/>
+            <input type="hidden" name="sortDir" th:value="${sortDir}"/>
+            <input type="datetime-local" name="eventTime"/> &nbsp; &nbsp;
+            <input type="datetime-local" name="recordCreationDate"/> &nbsp; &nbsp;
+
+            <button class="btn btn-primary" type="submit">Найти</button>
+        </div>
+    </form>
+</div>
+
 <br>
 <form action="/electronicJournal/description/" method="get">
     <div class="row justify-content-left" style="margin-left:3%">
         <label>
-            Введите ключевое слово: &nbsp;
+            Поиск: &nbsp;
         </label>
-        <input type="text" name="eventDescription">
+        <input type="search" name="eventDescription" placeholder="Введите ключевое слово" required size="22%"/> &nbsp;
         <button class="btn btn-primary" type="submit">Найти</button>
     </div>
 </form>
@@ -85,36 +85,50 @@
 </table>
 
 <div th:if="${totalPages > 1}">
-    <div class="row col-sm-10">
-        <div class="col-sm-2">
-            Всего записей: [[${totalItems}]]
-        </div>
-        <div class="col-sm-1">
-     <span th:each="i: ${#numbers.sequence(1, totalPages)}">
-      <a th:if="${currentPage != i}"
-         th:href="@{'/electronicJournal/page/' + ${i}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">[[${i}]]</a>
-      <span th:unless="${currentPage != i}">[[${i}]]</span>  &nbsp;
-     </span>
-        </div>
-        <div class="col-sm-1">
-            <a th:if="${currentPage < totalPages}"
-               th:href="@{'/electronicJournal/page/' + ${currentPage + 1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Следующаяя
-                страница</a> &nbsp;
-            <span th:unless="${currentPage < totalPages}">Следующаяя страница</span> &nbsp;
-        </div>
+    Всего записей: [[${totalItems}]]
+    <p></p>
+    <nav aria-label="Pagination">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                <a class="page-link" th:href="@{'/electronicJournal/page/1?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} +
+    '&eventTime=' + ${eventTime != null ? eventTime : ''} + '&recordCreationDate=' + ${recordCreationDate != null ? recordCreationDate : ''}}">Первая
+                    страница</a>
+            </li>
+            <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                <a class="page-link" th:href="@{'/electronicJournal/page/' + ${currentPage - 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} +
+       '&eventTime=' + ${eventTime != null ?  eventTime : ''} + '&recordCreationDate=' + ${recordCreationDate != null ? recordCreationDate : ''}}">Предыдущая
+                    страница</a>
+            </li>
+            <li class="page-item disabled" th:if="${currentPage - 5 > 1}">
+                <a class="page-link" href="#">...</a>
+            </li>
 
-        <div class="col-sm-1">
-            <a th:if="${currentPage < totalPages}"
-               th:href="@{'/electronicJournal/page/' + ${totalPages}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Последняя
-                страница</a> &nbsp;
-            <span th:unless="${currentPage < totalPages}">Последняя страница</span> &nbsp;
-        </div>
-    </div>
+            <li class="page-item" th:classappend="${i == currentPage} ? 'active'"
+                th:each="i : ${#numbers.sequence(currentPage > 5 ? currentPage - 5 : 1, currentPage + 5 < totalPages ? currentPage + 5 : totalPages)}">
+                <a class="page-link" th:href="@{'/electronicJournal/page/' + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} +
+               '&eventTime=' + ${eventTime != null ? eventTime : ''} + '&recordCreationDate=' + ${recordCreationDate != null ? recordCreationDate : ''}}">[[${i}]]</a>
+            </li>
+
+            <li class="page-item disabled" th:if="${currentPage + 5 < totalPages}">
+                <a class="page-link" href="#">...</a>
+            </li>
+            <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
+                <a class="page-link" th:href="@{'/electronicJournal/page/' + ${currentPage + 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} +
+       '&eventTime=' + ${eventTime != null ? eventTime : ''} + '&recordCreationDate=' + ${recordCreationDate != null ? recordCreationDate : ''}}">Следующая
+                    страница</a>
+            </li>
+            <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
+                <a class="page-link" th:href="@{'/electronicJournal/page/' + ${totalPages} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} +
+       '&eventTime=' + ${eventTime != null ? eventTime : ''} + '&recordCreationDate=' + ${recordCreationDate != null ? recordCreationDate : ''}}">Последняя
+                    страница</a>
+            </li>
+        </ul>
+    </nav>
 </div>
 
 <footer th:insert="~{blocks/footer :: footer}"></footer>
-<script src="/static/js/bootstrap.min.js"></script>
-<script src="/static/js/popper.min.js"></script>
 <script src="/static/js/jquery-3.6.4.min.js"></script>
+<script src="/static/js/popper.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
 </body>
 </html>

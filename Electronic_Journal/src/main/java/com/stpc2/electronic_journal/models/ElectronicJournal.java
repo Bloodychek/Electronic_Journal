@@ -3,6 +3,7 @@ package com.stpc2.electronic_journal.models;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -26,6 +27,7 @@ public class ElectronicJournal {
     private Integer brigadeNumber;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @Nullable
     @Column(name = "EVENT_TIME")
     private LocalDateTime eventTime;
 
@@ -39,6 +41,7 @@ public class ElectronicJournal {
     private String actionStatus;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @Nullable
     @Column(name = "RECORD_CREATION_DATE")
     private LocalDateTime recordCreationDate;
 }

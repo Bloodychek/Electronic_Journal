@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.List;
 
 @Controller
@@ -25,7 +27,7 @@ public class ElectronicJournalController {
     @GetMapping("/electronicJournal/index")
     public String index(Model model) {
         model.addAttribute("electronicJournal", electronicJournalService.findAll());
-        return findPaginated(1, "eventTime", "desc", model);
+        return findPaginated(model, 1, "eventTime", "desc", null, null);
     }
 
     @GetMapping("/electronicJournal/create")
@@ -84,44 +86,30 @@ public class ElectronicJournalController {
         return "redirect:/electronicJournal/index";
     }
 
-    @GetMapping("/electronicJournal/page/{pageNo}")
-    public String findPaginated(@PathVariable(value = "pageNo") int pageNo, @RequestParam("sortField") String sortField,
-                                @RequestParam("sortDir") String sortDir, Model model) {
-        int pageSize = 10;
+    @GetMapping("/electronicJournal/page/{pageNumber}")
+    public String findPaginated(Model model, @PathVariable(value = "pageNumber") int currentPage, @RequestParam("sortField") String sortField,
+                                @RequestParam("sortDir") String sortDir, @RequestParam(name = "eventTime") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @Nullable LocalDateTime eventTime,
+                                @RequestParam(name = "recordCreationDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @Nullable LocalDateTime recordCreationDate) {
 
-        Page<ElectronicJournal> page = electronicJournalService.findPaginated(pageNo, pageSize, sortField, sortDir);
+        Page<ElectronicJournal> page = electronicJournalService.findPaginated(currentPage, sortField, sortDir, eventTime, recordCreationDate);
         List<ElectronicJournal> electronicJournalList = page.getContent();
 
-        model.addAttribute("currentPage", pageNo);
-        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("currentPage", currentPage);
         model.addAttribute("totalItems", page.getTotalElements());
-
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("electronicJournal", electronicJournalList);
         model.addAttribute("sortField", sortField);
         model.addAttribute("sortDir", sortDir);
+        model.addAttribute("eventTime", eventTime);
+        model.addAttribute("recordCreationDate", recordCreationDate);
         model.addAttribute("reverseSortDir", sortDir.equals("desc") ? "asc" : "desc");
 
-        model.addAttribute("electronicJournal", electronicJournalList);
-        return "electronicJournal/index";
-    }
-
-    @GetMapping("/electronicJournal/date")
-    public String findAllByEventTimeBetween(@RequestParam(name = "eventTime") @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime eventTime,
-                                            @RequestParam(name = "recordCreationDate") @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime recordCreationDate, Model model) {
-        if (eventTime != null && recordCreationDate != null) {
-            List<ElectronicJournal> findByRangeDate = electronicJournalRepo.findAllByEventTimeBetween(eventTime, recordCreationDate);
-            model.addAttribute("electronicJournal", findByRangeDate);
-        } else {
-            model.addAttribute("electronicJournal", electronicJournalService.findAll());
-        }
         return "electronicJournal/index";
     }
 
     @GetMapping("/electronicJournal/description")
     public String findAllByEventDescription(@RequestParam(name = "eventDescription") @Nullable String eventDescription, Model model) {
-        if (eventDescription != null) {
-            List<ElectronicJournal> findByDescription = electronicJournalRepo.findAllByEventDescription(eventDescription);
-            model.addAttribute("electronicJournal", findByDescription);
-        }
+        model.addAttribute("electronicJournal", electronicJournalService.findAllByEventDescription(eventDescription));
         return "electronicJournal/index";
     }
 }
