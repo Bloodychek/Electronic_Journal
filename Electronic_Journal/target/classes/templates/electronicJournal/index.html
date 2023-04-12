@@ -14,24 +14,16 @@
         <div class="row justify-content-left" style="margin-left:3%">
             <input type="hidden" name="sortField" th:value="${sortField}"/>
             <input type="hidden" name="sortDir" th:value="${sortDir}"/>
+            <h5>Поиск: &nbsp; &nbsp;</h5>
             <input type="datetime-local" name="eventTime"/> &nbsp; &nbsp;
             <input type="datetime-local" name="recordCreationDate"/> &nbsp; &nbsp;
+            <input type="search" name="eventDescription" placeholder="Введите ключевое слово" size="22%"> &nbsp; &nbsp;
 
             <button class="btn btn-primary" type="submit">Найти</button>
         </div>
     </form>
 </div>
 
-<br>
-<form action="/electronicJournal/description/" method="get">
-    <div class="row justify-content-left" style="margin-left:3%">
-        <label>
-            Поиск: &nbsp;
-        </label>
-        <input type="search" name="eventDescription" placeholder="Введите ключевое слово" required size="22%"/> &nbsp;
-        <button class="btn btn-primary" type="submit">Найти</button>
-    </div>
-</form>
 <br>
 <form action="/electronicJournal/index" method="get">
     <div class="row justify-content-left" style="margin-left:3%">
@@ -91,36 +83,35 @@
         <ul class="pagination justify-content-center">
             <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
                 <a class="page-link" th:href="@{'/electronicJournal/page/1?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} +
-    '&eventTime=' + ${eventTime != null ? eventTime : ''} + '&recordCreationDate=' + ${recordCreationDate != null ? recordCreationDate : ''}}">Первая
-                    страница</a>
+    '&eventTime=' + ${eventTime != null ? eventTime : ''} + '&recordCreationDate=' + ${recordCreationDate != null ? recordCreationDate : ''} + '&eventDescription='
+    + ${eventDescription != null ? eventDescription : ''}}">Первая страница</a>
             </li>
             <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
                 <a class="page-link" th:href="@{'/electronicJournal/page/' + ${currentPage - 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} +
-       '&eventTime=' + ${eventTime != null ?  eventTime : ''} + '&recordCreationDate=' + ${recordCreationDate != null ? recordCreationDate : ''}}">Предыдущая
-                    страница</a>
+       '&eventTime=' + ${eventTime != null ?  eventTime : ''} + '&recordCreationDate=' + ${recordCreationDate != null ? recordCreationDate : ''} + '&eventDescription='
+        + ${eventDescription != null ? eventDescription : ''}}">Предыдущая страница</a>
             </li>
             <li class="page-item disabled" th:if="${currentPage - 5 > 1}">
                 <a class="page-link" href="#">...</a>
             </li>
-
             <li class="page-item" th:classappend="${i == currentPage} ? 'active'"
                 th:each="i : ${#numbers.sequence(currentPage > 5 ? currentPage - 5 : 1, currentPage + 5 < totalPages ? currentPage + 5 : totalPages)}">
                 <a class="page-link" th:href="@{'/electronicJournal/page/' + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} +
-               '&eventTime=' + ${eventTime != null ? eventTime : ''} + '&recordCreationDate=' + ${recordCreationDate != null ? recordCreationDate : ''}}">[[${i}]]</a>
+               '&eventTime=' + ${eventTime != null ? eventTime : ''} + '&recordCreationDate=' + ${recordCreationDate != null ? recordCreationDate : ''} +
+                '&eventDescription=' + ${eventDescription != null ? eventDescription : ''}}">[[${i}]]</a>
             </li>
-
             <li class="page-item disabled" th:if="${currentPage + 5 < totalPages}">
                 <a class="page-link" href="#">...</a>
             </li>
             <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
                 <a class="page-link" th:href="@{'/electronicJournal/page/' + ${currentPage + 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} +
-       '&eventTime=' + ${eventTime != null ? eventTime : ''} + '&recordCreationDate=' + ${recordCreationDate != null ? recordCreationDate : ''}}">Следующая
-                    страница</a>
+       '&eventTime=' + ${eventTime != null ? eventTime : ''} + '&recordCreationDate=' + ${recordCreationDate != null ? recordCreationDate : ''} + '&eventDescription='
+        + ${eventDescription != null ? eventDescription : ''}}">Следующая страница</a>
             </li>
             <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
                 <a class="page-link" th:href="@{'/electronicJournal/page/' + ${totalPages} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} +
-       '&eventTime=' + ${eventTime != null ? eventTime : ''} + '&recordCreationDate=' + ${recordCreationDate != null ? recordCreationDate : ''}}">Последняя
-                    страница</a>
+       '&eventTime=' + ${eventTime != null ? eventTime : ''} + '&recordCreationDate=' + ${recordCreationDate != null ? recordCreationDate : ''} + '&eventDescription='
+        + ${eventDescription != null ? eventDescription : ''}}">Последняя страница</a>
             </li>
         </ul>
     </nav>

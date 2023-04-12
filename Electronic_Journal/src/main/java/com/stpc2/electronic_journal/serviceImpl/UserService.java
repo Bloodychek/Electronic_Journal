@@ -7,6 +7,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
+/**
+ * Class that implements the methods of the UserDetails interface
+ */
 @Data
 public class UserService implements UserDetails {
     private User user;

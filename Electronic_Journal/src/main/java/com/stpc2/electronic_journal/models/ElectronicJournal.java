@@ -6,9 +6,11 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
-import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
+/**
+ * Model class that stores the entity of the electronic journal from the database
+ */
 @Entity
 @Data
 @NoArgsConstructor

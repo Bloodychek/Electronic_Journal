@@ -1,21 +1,19 @@
 package com.stpc2.electronic_journal.models;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.*;
-import java.util.Collection;
-import java.util.Collections;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-import static com.oracle.jrockit.jfr.FlightRecorder.isActive;
-
+/**
+ * Model class that stores user data from the database
+ */
 @Entity
 @Data
-@Table(name = "PERSONAL_STPC2", schema = "RML")
-public class User{
+@Table(name = "V_PERSONAL_STPC2", schema = "MK_PLUS")
+public class User {
     @Id
     @Column(name = "ID")
     private Integer id;
@@ -29,10 +27,9 @@ public class User{
     @Column(name = "CATEGORY_NAME")
     private String role;
 
-    // data access number
-    @Column(name = "DIV_NO")
-    private int divNo;
-
     @Column(name = "PERSONAL_NO")
     private String personalNo;
+
+    @Column(name = "CEH_NO")
+    private Integer cehNo;
 }
